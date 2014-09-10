@@ -199,6 +199,7 @@ public interface SummaryMarketDataResponseDocument extends org.apache.xmlbeans.X
             
             private Factory() { } // No instance of this class allowed
         }
+
     }
     
     /**

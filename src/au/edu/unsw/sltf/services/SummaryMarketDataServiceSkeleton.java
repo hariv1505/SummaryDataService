@@ -69,8 +69,21 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         	 
         	 //get file size
         	 smdResp.setFileSize(md.getFileSize());
+        
+        	 //TODO: do I have to abstract the response away from the client?
+        	 //I have to create a "setReturn"?
+        	 StringBuilder sbf = new StringBuilder();
+             sbf.append("EventSetId: ").append(smdResp.getEventSetId()).append("\n");
+             sbf.append("Security code: ").append(smdResp.getSec()).append("\n");
+             sbf.append("Start Date: ").append(smdResp.getStartDate()).append("\n");
+             sbf.append("End Date: ").append(smdResp.getEndDate()).append("\n");
+             sbf.append("Market Type: ").append(smdResp.getMarketType()).append("\n");
+             sbf.append("Currency code: ").append(smdResp.getCurrencyCode()).append("\n");
+             sbf.append("File size: ").append(smdResp.getFileSize()).append("\n");
+             //TODO: smdResp.setReturn(sbf.toString());
         	 
         	 smdRespDoc.setSummaryMarketDataResponse(smdResp);
+        	 
 			return smdRespDoc;
         }
      
