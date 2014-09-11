@@ -1,0 +1,9 @@
+
+au.edu.unsw.sltf.client
+au.edu.unsw.sltf.services
+au.edu.unsw.sltf.services.helper
+au.edu.unsw.sltf.services.impl
+org.w3.www._2004._06.xmlmime
+org.w3.www._2004._06.xmlmime.impl
+org.xmlsoap.schemas.soap.encoding
+org.xmlsoap.schemas.soap.encoding.impl

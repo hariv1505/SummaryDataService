@@ -7,6 +7,8 @@
  */
     package au.edu.unsw.sltf.services;
 
+import java.util.Calendar;
+
 import au.edu.unsw.sltf.services.SummaryMarketDataDocument.SummaryMarketData;
 import au.edu.unsw.sltf.services.SummaryMarketDataResponseDocument.SummaryMarketDataResponse;
 import au.edu.unsw.sltf.services.helper.MarketData;
@@ -44,15 +46,15 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         			 continue;
         		 }
         		 else {
-        			 md.get(i);
+        			 md.setIndex(i);
         			 //second line, get all the data we can
         			 if (i == 1) {
         				smdResp.setSec(md.getSec());
-        				smdResp.setStartDate(md.getDate());
-        				smdResp.setMarketType(md.getMarketType());
+        				smdResp.setStartDate(stringifyDate(md.getStartTime()));
+        				smdResp.setMarketType(md.getType());
         				smdResp.setCurrencyCode(md.getCurrencyCode());
         			 } else {
-        				 isMixed = !(md.getMarketType()
+        				 isMixed = !(md.getType()
         						 .equals(smdResp.getMarketType()));
         			 }
         		 }
@@ -64,11 +66,11 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         	 }
         	 
         	 //get end time
-        	 md.get(md.size()-1);
-        	 smdResp.setEndDate(md.getDate());
+        	 md.setIndex(md.size()-1);
+        	 smdResp.setEndDate(stringifyDate(md.getEndTime()));
         	 
         	 //get file size
-        	 smdResp.setFileSize(md.getFileSize());
+        	 smdResp.setFileSize(Long.toString(md.getFileSize()));
         
         	 //TODO: do I have to abstract the response away from the client?
         	 //I have to create a "setReturn"?
@@ -86,6 +88,11 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         	 
 			return smdRespDoc;
         }
+
+		private Calendar stringifyDate(Calendar endTime) {
+			// TODO Auto-generated method stub
+			return null;
+		}
      
     }
     
