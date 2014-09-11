@@ -285,6 +285,9 @@ public class MarketData {
 	        	csvString += m.getTime() + ",";
 	        	csvString += m.getGmtOffset() + ",";
 	        	csvString += m.getType() + ",";
+	        	if (this.getCurrencyCode().equals("AUD")) {
+	        		csvString += "AUD";
+	        	}
 	        	csvString += m.getPrice() + ",";
 	        	csvString += m.getVolume() + ",";
 	        	csvString += m.getBidPrice() + ",";
@@ -307,6 +310,9 @@ public class MarketData {
 	}
 
 	public String getCurrencyCode() {
-		return md.get(0).getPrice().replaceAll("[^A-Za-z]+", "");
+		String ans = md.get(0).getPrice().replaceAll("[^A-Za-z]+", "");
+		if (ans.isEmpty()) {
+			return "AUD";
+		} else return ans;
 	}
 }
