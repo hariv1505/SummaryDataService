@@ -273,19 +273,19 @@ public class MarketData {
 
 	public String stringify() {
 		if (csvString.isEmpty()) {
-			csvString += "#RIC,Date[G],Time[G],GMT Offset,Type,Price,Volume,Bid Price,Bid Size,Ask Price,Ask Size";
+			csvString += "#RIC,Date[G],Time[G],GMT Offset,Type,Price,Volume,Bid Price,Bid Size,Ask Price,Ask Size\n";
 			for (MarketData m : md) {
-	        	csvString += m.getSec();
-	        	csvString += m.getDate();
-	        	csvString += m.getTime();
-	        	csvString += m.getGmtOffset();
-	        	csvString += m.getType();
-	        	csvString += m.getPrice();
-	        	csvString += m.getVolume();
-	        	csvString += m.getBidPrice();
-	        	csvString += m.getBidSize();
-	        	csvString += m.getAskPrice();
-	        	csvString += m.getAskSize();
+	        	csvString += m.getSec() + ",";
+	        	csvString += m.getDate() + ",";
+	        	csvString += m.getTime() + ",";
+	        	csvString += m.getGmtOffset() + ",";
+	        	csvString += m.getType() + ",";
+	        	csvString += m.getPrice() + ",";
+	        	csvString += m.getVolume() + ",";
+	        	csvString += m.getBidPrice() + ",";
+	        	csvString += m.getBidSize() + ",";
+	        	csvString += m.getAskPrice() + ",";
+	        	csvString += m.getAskSize() + "\n";
 	        	csvString += "\n";
 			}
 		}
