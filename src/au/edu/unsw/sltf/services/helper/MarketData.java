@@ -56,6 +56,11 @@ public class MarketData {
 		this.endTime = endDate;
 		URLtoMD(dataSourceURL);
 	}
+	
+
+	public List<MarketData> getMd() {
+		return md;
+	}
 
 	private void URLtoMD(String dataSourceURL) {
         try {
@@ -222,7 +227,7 @@ public class MarketData {
 	}
 
 
-	public void readCSV(String eventSetId) throws FileNotFoundException {
+	private void readCSV(String eventSetId) throws FileNotFoundException {
 		//Get scanner instance
 		File f = new File(eventSetId);
 		this.fileSize = f.length();
