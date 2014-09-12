@@ -36,12 +36,12 @@ public class MarketData {
 	static List<MarketData> md = new ArrayList<MarketData>();
 	
 
-	public MarketData(String eventSetId) {
+	public MarketData(String eventSetId) throws FileNotFoundException {
 		try {
 			readCSV(eventSetId);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw e;
 		}
 	}
 	

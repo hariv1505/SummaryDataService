@@ -7,9 +7,10 @@
  */
     package au.edu.unsw.sltf.services;
 
-import java.util.Calendar;
+import java.io.FileNotFoundException;
 
 import au.edu.unsw.sltf.services.SummaryMarketDataDocument.SummaryMarketData;
+import au.edu.unsw.sltf.services.SummaryMarketDataFaultDocument.SummaryMarketDataFault;
 import au.edu.unsw.sltf.services.SummaryMarketDataResponseDocument.SummaryMarketDataResponse;
 import au.edu.unsw.sltf.services.helper.MarketData;
     /**
@@ -32,7 +33,13 @@ import au.edu.unsw.sltf.services.helper.MarketData;
           )
             throws SummaryMarketDataFaultException{
         	 SummaryMarketData smd = summaryMarketData0.getSummaryMarketData();
-        	 MarketData md = new MarketData(smd.getEventSetId());
+        	 MarketData md;
+			try {
+				md = new MarketData(smd.getEventSetId());
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				throw smdFaultException("Event Id returned no file", "InvalidEventSetId");
+			}
         	 
         	 SummaryMarketDataResponseDocument smdRespDoc = SummaryMarketDataResponseDocument.Factory.newInstance();
         	 SummaryMarketDataResponse smdResp = smdRespDoc.addNewSummaryMarketDataResponse();
@@ -50,7 +57,7 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         			 //second line, get all the data we can
         			 if (i == 1) {
         				smdResp.setSec(md.getSec());
-        				smdResp.setStartDate(stringifyDate(md.getStartTime()));
+        				smdResp.setStartDate(md.getStartTime());
         				smdResp.setMarketType(md.getType());
         				smdResp.setCurrencyCode(md.getCurrencyCode());
         			 } else {
@@ -67,7 +74,7 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         	 
         	 //get end time
         	 md.setIndex(md.size()-1);
-        	 smdResp.setEndDate(stringifyDate(md.getEndTime()));
+        	 smdResp.setEndDate(md.getEndTime());
         	 
         	 //get file size
         	 smdResp.setFileSize(Long.toString(md.getFileSize()));
@@ -89,9 +96,19 @@ import au.edu.unsw.sltf.services.helper.MarketData;
 			return smdRespDoc;
         }
 
-		private Calendar stringifyDate(Calendar endTime) {
-			// TODO Auto-generated method stub
-			return null;
+		private SummaryMarketDataFaultException smdFaultException(String faultMsg, String type) {
+            au.edu.unsw.sltf.services.SummaryMarketDataFaultType.Enum faultType = 
+           		 au.edu.unsw.sltf.services.SummaryMarketDataFaultType.Enum.
+           		 forString(type);
+            SummaryMarketDataFault fault = SummaryMarketDataFault.Factory.newInstance();
+            fault.setFaultMessage(faultMsg);
+            fault.setFaultType(faultType);
+            SummaryMarketDataFaultDocument faultDoc = SummaryMarketDataFaultDocument.Factory.newInstance();
+            faultDoc.setSummaryMarketDataFault(fault);
+            SummaryMarketDataFaultException se = new SummaryMarketDataFaultException();
+            se.setFaultMessage(faultDoc);
+            
+            return se;
 		}
      
     }
