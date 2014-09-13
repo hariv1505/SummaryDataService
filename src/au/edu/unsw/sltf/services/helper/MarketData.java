@@ -54,7 +54,7 @@ public class MarketData {
 	}
 	
 	public MarketData(String sec2, Calendar startDate, Calendar endDate,
-			String dataSourceURL) throws IOException, IncorrectTimeException {
+			String dataSourceURL) throws IOException, IncorrectTimeException, ParseException {
 		this.sec = sec2;
 		this.startTime = startDate;
 		this.endTime = endDate;
