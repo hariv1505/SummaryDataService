@@ -35,17 +35,11 @@ public class MarketData {
 	private long fileSize;
 	
 	private List<MarketData> md = new ArrayList<MarketData>();
-	
-	private String resourcesFolder = /*System.getProperty("catalina.home") + */"/home/hari/apache-tomcat-7.0.42/webapps/ROOT/cs9322ass1/";
-	
+    private String resourcesFolder = System.getProperty("catalina.home") + "/webapps/ROOT/cs9322ass1/";
+
 
 	public MarketData(String eventSetId) throws FileNotFoundException {
-		try {
-			readCSV(eventSetId);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			throw e;
-		}
+		readCSV(eventSetId);
 	}
 	
 	private MarketData() {
@@ -66,36 +60,37 @@ public class MarketData {
 	}
 
 	private void URLtoMD(String dataSourceURL) throws IOException, IncorrectTimeException, ParseException {
-        	URL dataURL = new URL(dataSourceURL);
-	        
-	        InputStream is = dataURL.openStream();
-	        InputStreamReader isr = new InputStreamReader(is);
-	        BufferedReader br = new BufferedReader(isr);
-	        String theLine;
-	        String result = "";
-	
-	        if (endTime.before(startTime)) {
-	            throw new IncorrectTimeException();
-	        }
-	        // Read in the lines
-	        while ((theLine = br.readLine()) != null) {
-	            // Don't process the header line, just add it to the result
-	            if (!theLine.contains("#RIC,Date[G],Time[G],GMT Offset,Type,Price,Volume,Bid Price,Bid Size,Ask Price,Ask Size")) {
-	                String[] lineArray = theLine.split(",");
-	                Calendar lineDate = getDateFromArray(lineArray);
-	                // Add the line to the result if it is between the startTime
-	                // and endTime and the security code is the same
-	                if ((lineDate.after(startTime) || lineDate.equals(startTime)) && (lineDate.before(endTime) || lineDate.equals(endTime))
-	                        && sec.equals(lineArray[0])) {
-	                    result += theLine + "\n";
-	                }
-	
-	            } else {
-	            	result += theLine + "\n";
-	            }
-	        }
-	        
-	        csvString = result;
+    	URL dataURL = new URL(dataSourceURL);
+        
+        InputStream is = dataURL.openStream();
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
+        String theLine;
+        String result = "";
+
+        if (endTime.before(startTime)) {
+            throw new IncorrectTimeException();
+        }
+        
+        // Read in the lines
+        while ((theLine = br.readLine()) != null) {
+            // Don't process the header line, just add it to the result
+            if (!theLine.contains("#RIC,Date[G],Time[G],GMT Offset,Type,Price,Volume,Bid Price,Bid Size,Ask Price,Ask Size")) {
+                String[] lineArray = theLine.split(",");
+                Calendar lineDate = getDateFromArray(lineArray);
+                // Add the line to the result if it is between the startTime
+                // and endTime and the security code is the same
+                if ((lineDate.after(startTime) || lineDate.equals(startTime)) && (lineDate.before(endTime) || lineDate.equals(endTime))
+                        && sec.equals(lineArray[0])) {
+                    result += theLine + "\n";
+                }
+
+            } else {
+            	result += theLine + "\n";
+            }
+        }
+        
+        csvString = result;
 	}
 
 	private Calendar getDateFromArray(String[] lineArray) throws ParseException {
@@ -228,42 +223,51 @@ public class MarketData {
 
 	private void readCSV(String eventSetId) throws FileNotFoundException {
 		//Get scanner instance
-		File f = new File(resourcesFolder + eventSetId + ".csv");
+		File f = new File(resourcesFolder+eventSetId+".csv");
 		this.fileSize = f.length();
-        Scanner scanner = new Scanner(f);
-         
-        //Set the delimiter used in file
-        scanner.useDelimiter(",");
-    	
-        int i = 0;
-         
+        Scanner lineScanner = new Scanner(f);
+         lineScanner.nextLine();
         //Get all tokens and store them in some data structure
-        //I am just printing them
         
-        while (scanner.hasNext()) 
+        while (lineScanner.hasNextLine()) 
         {
-        	md.add(new MarketData());
-        	md.get(i).setSec(scanner.next());
-        	md.get(i).setDate(scanner.next());
-        	md.get(i).setTime(scanner.next());
-        	md.get(i).setGmtOffset(scanner.next());
-        	md.get(i).setType(scanner.next());
-        	md.get(i).setPrice(scanner.next());
-        	md.get(i).setVolume(scanner.next());
-        	md.get(i).setBidPrice(scanner.next());
-        	md.get(i).setBidSize(scanner.next());
-        	md.get(i).setAskPrice(scanner.next());
-        	md.get(i).setAskSize(scanner.next());
-        	i++;
+        	String line = lineScanner.nextLine();
+        	Scanner scanner = new Scanner(line);
+        	scanner.useDelimiter(",");
+        	
+        	MarketData marketData = new MarketData();
+        	if(scanner.hasNext())
+        		marketData.setSec(scanner.next());
+        	if(scanner.hasNext())
+        		marketData.setDate(scanner.next());
+        	if(scanner.hasNext())
+        		marketData.setTime(scanner.next());
+        	if(scanner.hasNext())
+        		marketData.setGmtOffset(scanner.next());
+        	if(scanner.hasNext())
+        		marketData.setType(scanner.next());
+        	if(scanner.hasNext())
+        		marketData.setPrice(scanner.next());
+        	if(scanner.hasNext())
+        		marketData.setVolume(scanner.next());
+        	if(scanner.hasNext())
+        		marketData.setBidPrice(scanner.next());
+        	if(scanner.hasNext())
+        		marketData.setBidSize(scanner.next());
+        	if(scanner.hasNext())
+        		marketData.setAskPrice(scanner.next());
+        	if(scanner.hasNext())
+        		marketData.setAskSize(scanner.next());
+        	else
+        		marketData.setAskSize("");
+        	md.add(marketData);
+        	scanner.close();
         }
-         
-        //Do not forget to close the scanner  
-        scanner.close();
+        lineScanner.close();
 	}
 	
 	private Calendar convertDate(String date) throws ParseException {
-		Date d = null;
-    	d = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
+		Date d = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
         Calendar c = Calendar.getInstance();
         c.setTime(d);
         
