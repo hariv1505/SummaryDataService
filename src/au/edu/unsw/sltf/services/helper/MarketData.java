@@ -36,12 +36,11 @@ public class MarketData {
 	
 	private List<MarketData> md = new ArrayList<MarketData>();
 	
-	private String resourcesFolder;
+	private String resourcesFolder = /*System.getProperty("catalina.home") + */"/home/hari/apache-tomcat-7.0.42/webapps/ROOT/cs9322ass1/";
 	
 
 	public MarketData(String eventSetId) throws FileNotFoundException {
 		try {
-			resourcesFolder = "/home/hari/apache-tomcat-7.0.42/webapps/ROOT/cs9322ass1/";
 			readCSV(eventSetId);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
