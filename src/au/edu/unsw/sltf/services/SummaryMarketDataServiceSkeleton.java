@@ -44,27 +44,22 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         	 SummaryMarketDataResponseDocument smdRespDoc = SummaryMarketDataResponseDocument.Factory.newInstance();
         	 SummaryMarketDataResponse smdResp = smdRespDoc.addNewSummaryMarketDataResponse();
         	 
-        	 smdResp.setEventSetId(smd.getEventSetId());
+        	 /*smdResp.setEventSetId(smd.getEventSetId());
         	 boolean isMixed = false;
         	 
         	 //traverse through the elements
         	 for (int i = 0; (i < md.size()-1 && !isMixed); i++) {
-        		 if (i == 0) {
-        			 continue;
-        		 }
-        		 else {
-        			 md.setIndex(i);
-        			 //second line, get all the data we can
-        			 if (i == 1) {
-        				smdResp.setSec(md.getSec());
-        				smdResp.setStartDate(md.getStartTime());
-        				smdResp.setMarketType(md.getType());
-        				smdResp.setCurrencyCode(md.getCurrencyCode());
-        			 } else {
-        				 isMixed = !(md.getType()
-        						 .equals(smdResp.getMarketType()));
-        			 }
-        		 }
+    		 	 md.setIndex(i);
+    			 //second line, get all the data we can
+    			 if (i == 1) {
+    				smdResp.setSec(md.getSec());
+    				smdResp.setStartDate(md.getStartTime());
+    				smdResp.setMarketType(md.getType());
+    				smdResp.setCurrencyCode(md.getCurrencyCode());
+    			 } else {
+    				 isMixed = !(md.getType()
+						 .equals(smdResp.getMarketType()));
+    			 }
         	 }
         	 
         	 //check if mixed
@@ -79,8 +74,6 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         	 //get file size
         	 smdResp.setFileSize(Long.toString(md.getFileSize()));
         
-        	 //TODO: do I have to abstract the response away from the client?
-        	 //I have to create a "setReturn"?
         	 StringBuilder sbf = new StringBuilder();
              sbf.append("EventSetId: ").append(smdResp.getEventSetId()).append("\n");
              sbf.append("Security code: ").append(smdResp.getSec()).append("\n");
@@ -88,8 +81,7 @@ import au.edu.unsw.sltf.services.helper.MarketData;
              sbf.append("End Date: ").append(smdResp.getEndDate()).append("\n");
              sbf.append("Market Type: ").append(smdResp.getMarketType()).append("\n");
              sbf.append("Currency code: ").append(smdResp.getCurrencyCode()).append("\n");
-             sbf.append("File size: ").append(smdResp.getFileSize()).append("\n");
-             //TODO: smdResp.setReturn(sbf.toString());
+             sbf.append("File size: ").append(smdResp.getFileSize()).append("\n"); */
         	 
         	 smdRespDoc.setSummaryMarketDataResponse(smdResp);
         	 

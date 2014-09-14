@@ -36,11 +36,12 @@ public class MarketData {
 	
 	private List<MarketData> md = new ArrayList<MarketData>();
 	
-	private String resourcesFolder = System.getProperty("catalina.home") + "/webapps/ROOT/cs9322ass1/";
+	private String resourcesFolder;
 	
 
 	public MarketData(String eventSetId) throws FileNotFoundException {
 		try {
+			resourcesFolder = "/home/hari/apache-tomcat-7.0.42/webapps/ROOT/cs9322ass1/";
 			readCSV(eventSetId);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -242,7 +243,7 @@ public class MarketData {
         
         while (scanner.hasNext()) 
         {
-        	md.set(i, new MarketData());
+        	md.add(new MarketData());
         	md.get(i).setSec(scanner.next());
         	md.get(i).setDate(scanner.next());
         	md.get(i).setTime(scanner.next());
