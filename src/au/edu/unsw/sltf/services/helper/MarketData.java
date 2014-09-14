@@ -229,8 +229,6 @@ public class MarketData {
         Scanner lineScanner = new Scanner(f);
          lineScanner.nextLine();
          boolean setStart  = false;
-         String tempDate = null;
-         String tempTime = null;
         //Get all tokens and store them in some data structure
         
         while (lineScanner.hasNextLine()) 
@@ -253,9 +251,6 @@ public class MarketData {
         		setStart = true;
         	}
     	
-    		tempDate = marketData.getDate();
-    		tempTime = marketData.getTime();
-
     		if(scanner.hasNext())
         		marketData.setGmtOffset(scanner.next());
         	if(scanner.hasNext())
@@ -278,12 +273,15 @@ public class MarketData {
         	scanner.close();
         }
         lineScanner.close();
-        
-        if (tempDate != null && tempTime != null) {
+
+        if (md.size() > 0) {
+        	String tempDate = md.get(md.size() - 1).getDate();
+        	String tempTime = md.get(md.size() - 1).getTime();
         	Calendar c = convertDate(tempDate);
     		convertTime(tempTime, c);
     		this.setEndTime(c);
         }
+        
 	}
 	
 	private Calendar convertDate(String date) throws ParseException {
