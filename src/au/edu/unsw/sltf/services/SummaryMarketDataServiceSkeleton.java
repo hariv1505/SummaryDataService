@@ -8,6 +8,8 @@
     package au.edu.unsw.sltf.services;
 
 import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.util.List;
 
 import au.edu.unsw.sltf.services.SummaryMarketDataDocument.SummaryMarketData;
 import au.edu.unsw.sltf.services.SummaryMarketDataFaultDocument.SummaryMarketDataFault;
@@ -33,12 +35,17 @@ import au.edu.unsw.sltf.services.helper.MarketData;
           )
             throws SummaryMarketDataFaultException{
         	 SummaryMarketData smd = summaryMarketData0.getSummaryMarketData();
-        	 MarketData md;
+        	 MarketData m;
+        	 List<MarketData> md;
 			try {
-				md = new MarketData(smd.getEventSetId());
+				m = new MarketData(smd.getEventSetId());
+				md = m.getMd();
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				throw smdFaultException("Event Id returned no file", "InvalidEventSetId");
+			} catch (ParseException e) {
+				e.printStackTrace();
+				throw smdFaultException("Error regarding dates", "ProgramError");
 			}
         	 
         	 SummaryMarketDataResponseDocument smdRespDoc = SummaryMarketDataResponseDocument.Factory.newInstance();
@@ -47,19 +54,15 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         	 smdResp.setEventSetId(smd.getEventSetId());
         	 boolean isMixed = false;
         	 
+			 //second line, get all the data we can
+        	 smdResp.setSec(md.get(0).getSec());
+        	 smdResp.setStartDate(m.getStartTime());
+        	 smdResp.setMarketType(m.getType());
+        	 smdResp.setCurrencyCode(m.getCurrencyCode());
         	 //traverse through the elements
-        	 for (int i = 0; (i < md.size()-1 && !isMixed); i++) {
-    		 	 md.setIndex(i);
-    			 //second line, get all the data we can
-    			 if (i == 1) {
-    				smdResp.setSec(md.getSec());
-    				smdResp.setStartDate(md.getStartTime());
-    				smdResp.setMarketType(md.getType());
-    				smdResp.setCurrencyCode(md.getCurrencyCode());
-    			 } else {
-    				 isMixed = !(md.getType()
-						 .equals(smdResp.getMarketType()));
-    			 }
+        	 for (int i = 1; (i < md.size()-1 && !isMixed); i++) {
+				 isMixed = !(md.get(i).getType()
+					 .equals(smdResp.getMarketType()));
         	 }
         	 
         	 //check if mixed
@@ -68,11 +71,10 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         	 }
         	 
         	 //get end time
-        	 md.setIndex(md.size()-1);
-        	 smdResp.setEndDate(md.getEndTime());
+        	 smdResp.setEndDate(md.get(md.size()-1).getEndTime());
         	 
         	 //get file size
-        	 smdResp.setFileSize(Long.toString(md.getFileSize()));
+        	 smdResp.setFileSize(Long.toString(m.getFileSize()));
         
         	 StringBuilder sbf = new StringBuilder();
              sbf.append("EventSetId: ").append(smdResp.getEventSetId()).append("\n");

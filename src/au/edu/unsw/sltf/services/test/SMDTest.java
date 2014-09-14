@@ -1,18 +1,17 @@
 package au.edu.unsw.sltf.services.test;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
-
 
 import au.edu.unsw.sltf.services.helper.MarketData;
 
 public class SMDTest {
 
-	public static void test() throws FileNotFoundException {
-		List<MarketData> m = new ArrayList<MarketData>();
-		MarketData md = new MarketData("12345");
+	public static void test() throws FileNotFoundException, ParseException {
+		MarketData m = new MarketData("311359");
+		List<MarketData> md = m.getMd();
 	   	 boolean isMixed = false;
 	   	 String sec = null;
 	   	 Calendar startDate = null;
@@ -21,19 +20,16 @@ public class SMDTest {
 	   	 String currCode = null;
 	   	 String filesize;
 	   	 
+		sec = (md.get(0).getSec());
+		startDate = (m.getStartTime());
+		type = (md.get(0).getType());
+		currCode = (m.getCurrencyCode());
+	   	 
 	   	 //traverse through the elements
-	   	 for (int i = 0; (i < md.size()-1 && !isMixed); i++) {
-			 	 md.setIndex(i);
-				 //second line, get all the data we can
-				 if (i == 1) {
-					sec = (md.getSec());
-					startDate = (md.getStartTime());
-					type = (md.getType());
-					currCode = (md.getCurrencyCode());
-				 } else {
-					 isMixed = !(md.getType()
-						 .equals(type));
-				 }
+	   	 for (int i = 1; (i < md.size()-1 && !isMixed); i++) {
+			 //second line, get all the data we can
+			 isMixed = !(md.get(i).getType()
+				 .equals(type));
 	   	 }
 	   	 
 	   	 //check if mixed
@@ -42,11 +38,10 @@ public class SMDTest {
 	   	 }
 	   	 
 	   	 //get end time
-	   	 md.setIndex(md.size()-1);
-	   	 endDate = (md.getEndTime());
+	   	 endDate = (m.getEndTime());
 	   	 
 	   	 //get file size
-	   	 filesize = (Long.toString(md.getFileSize()));
+	   	 filesize = (Long.toString(m.getFileSize()));
 	   
 	   	 StringBuilder sbf = new StringBuilder();
 	        sbf.append("EventSetId: ").append("12345").append("\n");
@@ -64,7 +59,8 @@ public class SMDTest {
 		try {
 			test();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 	}

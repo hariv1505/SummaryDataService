@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class MarketData {
@@ -35,10 +36,10 @@ public class MarketData {
 	private long fileSize;
 	
 	private List<MarketData> md = new ArrayList<MarketData>();
-    private String resourcesFolder = System.getProperty("catalina.home") + "/webapps/ROOT/cs9322ass1/";
+    private String resourcesFolder = "/home/hari/apache-tomcat-7.0.42" + "/webapps/ROOT/cs9322ass1/";
 
 
-	public MarketData(String eventSetId) throws FileNotFoundException {
+	public MarketData(String eventSetId) throws FileNotFoundException, ParseException {
 		readCSV(eventSetId);
 	}
 	
@@ -101,7 +102,7 @@ public class MarketData {
 
 	private void convertTime(String time, Calendar c) {
 		String[] times = time.split(":");
-		String[] seconds = times[2].split(".");
+		String[] seconds = times[2].split("\\.");
 		c.set(Calendar.HOUR, Integer.parseInt(times[0]));
 		c.set(Calendar.MINUTE, Integer.parseInt(times[1]));
 		c.set(Calendar.SECOND, Integer.parseInt(seconds[0]));
@@ -221,12 +222,15 @@ public class MarketData {
 	}
 
 
-	private void readCSV(String eventSetId) throws FileNotFoundException {
+	private void readCSV(String eventSetId) throws FileNotFoundException, ParseException, NoSuchElementException {
 		//Get scanner instance
 		File f = new File(resourcesFolder+eventSetId+".csv");
 		this.fileSize = f.length();
         Scanner lineScanner = new Scanner(f);
          lineScanner.nextLine();
+         boolean setStart  = false;
+         String tempDate = null;
+         String tempTime = null;
         //Get all tokens and store them in some data structure
         
         while (lineScanner.hasNextLine()) 
@@ -242,7 +246,17 @@ public class MarketData {
         		marketData.setDate(scanner.next());
         	if(scanner.hasNext())
         		marketData.setTime(scanner.next());
-        	if(scanner.hasNext())
+        	if (!setStart) {
+        		Calendar c = convertDate(marketData.getDate());
+        		convertTime(marketData.getTime(), c);
+        		this.setStartTime(c);
+        		setStart = true;
+        	}
+    	
+    		tempDate = marketData.getDate();
+    		tempTime = marketData.getTime();
+
+    		if(scanner.hasNext())
         		marketData.setGmtOffset(scanner.next());
         	if(scanner.hasNext())
         		marketData.setType(scanner.next());
@@ -264,6 +278,12 @@ public class MarketData {
         	scanner.close();
         }
         lineScanner.close();
+        
+        if (tempDate != null && tempTime != null) {
+        	Calendar c = convertDate(tempDate);
+    		convertTime(tempTime, c);
+    		this.setEndTime(c);
+        }
 	}
 	
 	private Calendar convertDate(String date) throws ParseException {
