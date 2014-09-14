@@ -36,6 +36,8 @@ public class MarketData {
 	
 	private List<MarketData> md = new ArrayList<MarketData>();
 	
+	private String resourcesFolder = System.getProperty("catalina.home") + "/webapps/ROOT/cs9322ass1/";
+	
 
 	public MarketData(String eventSetId) throws FileNotFoundException {
 		try {
@@ -226,7 +228,7 @@ public class MarketData {
 
 	private void readCSV(String eventSetId) throws FileNotFoundException {
 		//Get scanner instance
-		File f = new File(eventSetId);
+		File f = new File(resourcesFolder + eventSetId + ".csv");
 		this.fileSize = f.length();
         Scanner scanner = new Scanner(f);
          
