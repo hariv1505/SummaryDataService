@@ -261,7 +261,7 @@ public class MarketData {
 	
 	private Calendar convertDate(String date) throws ParseException {
 		Date d = null;
-    	d = new SimpleDateFormat("dd/mm/yyyy").parse(date);
+    	d = new SimpleDateFormat("dd-MMM-yyyy").parse(date);
         Calendar c = Calendar.getInstance();
         c.setTime(d);
         
