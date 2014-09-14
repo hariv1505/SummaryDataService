@@ -71,7 +71,7 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         	 }
         	 
         	 //get end time
-        	 smdResp.setEndDate(md.get(md.size()-1).getEndTime());
+        	 smdResp.setEndDate(m.getEndTime());
         	 
         	 //get file size
         	 smdResp.setFileSize(Long.toString(m.getFileSize()));
