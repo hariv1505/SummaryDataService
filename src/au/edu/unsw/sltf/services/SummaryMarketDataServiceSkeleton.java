@@ -44,7 +44,7 @@ import au.edu.unsw.sltf.services.helper.MarketData;
         	 SummaryMarketDataResponseDocument smdRespDoc = SummaryMarketDataResponseDocument.Factory.newInstance();
         	 SummaryMarketDataResponse smdResp = smdRespDoc.addNewSummaryMarketDataResponse();
         	 
-        	 /*smdResp.setEventSetId(smd.getEventSetId());
+        	 smdResp.setEventSetId(smd.getEventSetId());
         	 boolean isMixed = false;
         	 
         	 //traverse through the elements
@@ -81,7 +81,7 @@ import au.edu.unsw.sltf.services.helper.MarketData;
              sbf.append("End Date: ").append(smdResp.getEndDate()).append("\n");
              sbf.append("Market Type: ").append(smdResp.getMarketType()).append("\n");
              sbf.append("Currency code: ").append(smdResp.getCurrencyCode()).append("\n");
-             sbf.append("File size: ").append(smdResp.getFileSize()).append("\n"); */
+             sbf.append("File size: ").append(smdResp.getFileSize()).append("\n");
         	 
         	 smdRespDoc.setSummaryMarketDataResponse(smdResp);
         	 
