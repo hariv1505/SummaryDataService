@@ -36,7 +36,7 @@ public class MarketData {
 	private long fileSize;
 	
 	private List<MarketData> md = new ArrayList<MarketData>();
-	 private String resourcesFolder = System.getProperty("catalina.home") + "/webapps/ROOT/cs9322ass1/";
+	 private String resourcesFolder = System.getProperty("catalina.base") + "/webapps/SoapServices/cs9322ass1/";
 
 
 	public MarketData(String eventSetId) throws FileNotFoundException, ParseException {
